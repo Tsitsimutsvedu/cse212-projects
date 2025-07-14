@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 // TODO Problem 2 - Write and run test cases and fix the code to match requirements.
@@ -5,55 +6,97 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 [TestClass]
 public class PriorityQueueTests
 {
-    /// <summary>
-    /// Test the behavior of an empty priority queue.
-    /// </summary>
     [TestMethod]
-    // Scenario: Creating a new PriorityQueue and attempting to dequeue.
-    // Expected Result: An exception is thrown (e.g., InvalidOperationException).
-    // Defect(s) Found: None yet – to be verified.
-    public void TestPriorityQueue_EmptyDequeue()
+    // Scenario: Add items (L, priority 1 and M, priority 4, N, priority 2)
+    //to the queue to ensure they were properly enqueued
+    // Expected Result: [L (Pri:1), M (Pri:4)]
+    // Defect(s) Found: None.
+    public void TestPriorityQueue_1()
     {
         var priorityQueue = new PriorityQueue();
+        priorityQueue.Enqueue("L", 1);
+        priorityQueue.Enqueue("M", 4);
+        priorityQueue.Enqueue("N", 2);
 
-        // This assumes PriorityQueue throws an exception when dequeuing from an empty queue.
-        Assert.ThrowsException<InvalidOperationException>(() => priorityQueue.Dequeue());
+        Assert.AreEqual("[L (Pri:1), M (Pri:4), N (Pri:2)]", priorityQueue.ToString());
     }
 
-    /// <summary>
-    /// Test enqueuing and dequeuing a single item.
-    /// </summary>
     [TestMethod]
-    // Scenario: Add a single item with a priority and then remove it.
-    // Expected Result: The item dequeued should match the enqueued item.
-    // Defect(s) Found: None yet – to be verified.
-    public void TestPriorityQueue_SingleEnqueueDequeue()
+    // Scenario: Add items (L, priority 1, M, priority 4, N, priority 2) to queue and
+    //dequeue in correct order of priority
+    // Expected Result: M, N, L
+    // Defect(s) Found: Items were not actually being removed from the queue and
+    //the for loop to check for highest priority item was starting at index 1
+    //an not inclusive of the last index.
+    public void TestPriorityQueue_2()
     {
         var priorityQueue = new PriorityQueue();
-        priorityQueue.Enqueue("Item1", 10);
+        priorityQueue.Enqueue("L", 1);
+        priorityQueue.Enqueue("M", 4);
+        priorityQueue.Enqueue("N", 2);
 
-        var item = priorityQueue.Dequeue();
-        Assert.AreEqual("Item1", item);
+        Assert.AreEqual("M",priorityQueue.Dequeue());
+        Assert.AreEqual("N",priorityQueue.Dequeue());
+        Assert.AreEqual("L",priorityQueue.Dequeue());
     }
 
-    /// <summary>
-    /// Test the order of multiple items based on priority.
-    /// </summary>
     [TestMethod]
-    // Scenario: Enqueue multiple items with different priorities.
-    // Expected Result: Items are dequeued in order of highest priority first.
-    // Defect(s) Found: None yet – to be verified.
-    public void TestPriorityQueue_MultiplePriorities()
+    // Scenario: Add items (L, priority 1, M, priority 4, N, priority 2, O, priority 4) to
+    //queue and dequeue in correct order of priority, even when the priority is the same
+    // Expected Result: M, O, N, L
+    // Defect(s) Found: If statement inside for loop was using a higher than or equal,
+    //which caused it to change the highest priority item to items further than the queue
+    //with the same priority
+    public void TestPriorityQueue_3()
     {
         var priorityQueue = new PriorityQueue();
-        priorityQueue.Enqueue("Low", 1);
-        priorityQueue.Enqueue("High", 100);
-        priorityQueue.Enqueue("Medium", 50);
+        priorityQueue.Enqueue("L", 1);
+        priorityQueue.Enqueue("M", 4);
+        priorityQueue.Enqueue("N", 2);
+        priorityQueue.Enqueue("O", 4);
 
-        Assert.AreEqual("High", priorityQueue.Dequeue());
-        Assert.AreEqual("Medium", priorityQueue.Dequeue());
-        Assert.AreEqual("Low", priorityQueue.Dequeue());
+        Assert.AreEqual("M",priorityQueue.Dequeue());
+        Assert.AreEqual("O",priorityQueue.Dequeue());
+        Assert.AreEqual("N",priorityQueue.Dequeue());
+        Assert.AreEqual("L",priorityQueue.Dequeue());
     }
 
-    // Add more test cases below to check edge cases, duplicate priorities, etc.
+    [TestMethod]
+    // Scenario: Dequeue an empty queue, which should throw an error
+    // Expected Result: Exception should be thrown with a error message
+    // Defect(s) Found: None
+    public void TestPriorityQueue_4()
+    {
+        var priorityQueue = new PriorityQueue();
+        try
+        {
+            priorityQueue.Dequeue();
+            Assert.Fail("Exception should have been thrown");
+        }
+        catch (InvalidOperationException e)
+        {
+            Assert.AreEqual("The queue is empty.", e.Message);
+        }
+    }
+
+    [TestMethod]
+    // Scenario: Add items (L, priority 1, M, priority 4) then dequeue once,
+    //then add another item (N, priority 2) and dequeue once again.
+    // Expected Result: M, N, L
+    // Defect(s) Found: None
+    public void TestPriorityQueue_5()
+    {
+        var priorityQueue = new PriorityQueue();
+        priorityQueue.Enqueue("L", 1);
+        priorityQueue.Enqueue("M", 4);
+
+        Assert.AreEqual("M",priorityQueue.Dequeue());
+
+        priorityQueue.Enqueue("N", 2);
+
+        Assert.AreEqual("N",priorityQueue.Dequeue());
+        Assert.AreEqual("L",priorityQueue.Dequeue());
+    }
+
+    // Add more test cases as needed below.
 }
