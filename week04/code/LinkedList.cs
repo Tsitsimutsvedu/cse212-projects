@@ -4,7 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 public class InsertTailTests
 {
     [TestMethod]
-    public void InsertTail_Empty()
+    
+    public void TestInsertTail_SingleNode()
     {
         var ll = new LinkedList();
 
@@ -15,7 +16,8 @@ public class InsertTailTests
     }
 
     [TestMethod]
-    public void InsertTail_Basic()
+    
+    public void TestInsertTail_MultipleNodes()
     {
         var ll = new LinkedList();
 
@@ -40,7 +42,8 @@ public class InsertTailTests
 public class RemoveTailTests
 {
     [TestMethod]
-    public void RemoveTail_Empty()
+    
+    public void TestRemoveTail_EmptyList()
     {
         var ll = new LinkedList();
 
@@ -50,7 +53,8 @@ public class RemoveTailTests
     }
 
     [TestMethod]
-    public void RemoveTail_Single()
+    
+    public void TestRemoveTail_SingleNode()
     {
         var ll = new LinkedList();
 
@@ -61,7 +65,8 @@ public class RemoveTailTests
     }
 
     [TestMethod]
-    public void RemoveTail_Basic()
+    
+    public void TestRemoveByValue_Found()
     {
         var ll = new LinkedList();
 
@@ -84,7 +89,8 @@ public class RemoveTailTests
 public class RemoveTests
 {
     [TestMethod]
-    public void Remove_NonExistant()
+    
+    public void TestRemoveByValue_NotFound()
     {
         var ll = new LinkedList();
 
